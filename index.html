@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>إلى أغلى إنسانة</title>
+    <style>
+        :root {
+            --dark-bg: #0a0a0a;
+            --heart-red: #ff0037;
+            --glow-color: rgba(255, 0, 55, 0.6);
+        }
+
+        body, html {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100%;
+            background-color: var(--dark-bg);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-family: 'Times New Roman', serif;
+            overflow: hidden;
+        }
+
+        #overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle, #1a1a1a 0%, #000 100%);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 2000;
+            transition: all 1.5s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        #start-btn {
+            background: none;
+            border: 1px solid var(--heart-red);
+            color: var(--heart-red);
+            padding: 12px 40px;
+            font-size: 1.1rem;
+            border-radius: 30px;
+            cursor: pointer;
+            transition: all 0.4s;
+            letter-spacing: 1px;
+            box-shadow: 0 0 15px var(--glow-color);
+        }
+
+        #start-btn:hover {
+            background: var(--heart-red);
+            color: white;
+            box-shadow: 0 0 30px var(--heart-red);
+        }
+
+        .scene {
+            position: relative;
+            display: none;
+            text-align: center;
+            animation: fadeInScene 3s ease;
+        }
+
+        @keyframes fadeInScene { from { opacity: 0; } to { opacity: 1; } }
+
+        .heart {
+            position: relative;
+            width: 120px;
+            height: 120px;
+            background-color: var(--heart-red);
+            transform: rotate(-45deg);
+            margin: 0 auto;
+            box-shadow: -10px 10px 90px var(--heart-red);
+            animation: slowBeat 2s infinite ease-in-out;
+        }
+
+        .heart::before, .heart::after {
+            content: '';
+            position: absolute;
+            width: 120px;
+            height: 120px;
+            background-color: var(--heart-red);
+            border-radius: 50%;
+        }
+
+        .heart::before { top: -60px; left: 0; }
+        .heart::after { top: 0; left: 60px; }
+
+        @keyframes slowBeat {
+            0%, 100% { transform: rotate(-45deg) scale(1); filter: brightness(1); }
+            50% { transform: rotate(-45deg) scale(1.1); filter: brightness(1.3); }
+        }
+
+        .message {
+            margin-top: 100px;
+            color: #fff;
+            font-size: 2.5rem;
+            font-style: italic;
+            letter-spacing: 3px;
+            text-shadow: 0 0 10px rgba(255,255,255,0.5);
+            opacity: 0.9;
+        }
+
+        .petal {
+            position: absolute;
+            background: var(--heart-red);
+            border-radius: 150% 0 150% 0;
+            opacity: 0.3;
+            pointer-events: none;
+            animation: falling 6s linear infinite;
+        }
+
+        @keyframes falling {
+            0% { transform: translateY(-10vh) rotate(0deg); opacity: 0; }
+            10% { opacity: 0.4; }
+            100% { transform: translateY(110vh) rotate(360deg); opacity: 0; }
+        }
+    </style>
+</head>
+<body>
+
+    <div id="overlay">
+        <button id="start-btn">إضغطي هنا لرؤية رسالتي..</button>
+    </div>
+
+    <div class="scene" id="main-scene">
+        <div class="heart"></div>
+        <div class="message">I Miss You</div>
+    </div>
+
+    <!-- موسيقى هادئة ورومانسية -->
+    <audio id="piano-music" loop>
+        <source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-8.mp3" type="audio/mpeg">
+    </audio>
+
+    <script>
+        const btn = document.getElementById('start-btn');
+        const overlay = document.getElementById('overlay');
+        const scene = document.getElementById('main-scene');
+        const audio = document.getElementById('piano-music');
+
+        btn.addEventListener('click', () => {
+            overlay.style.opacity = '0';
+            setTimeout(() => {
+                overlay.style.display = 'none';
+                scene.style.display = 'block';
+                audio.volume = 0.4;
+                audio.play();
+                createPetals();
+            }, 1500);
+        });
+
+        function createPetals() {
+            setInterval(() => {
+                const petal = document.createElement('div');
+                petal.classList.add('petal');
+                const size = Math.random() * 15 + 10;
+                petal.style.width = size + 'px';
+                petal.style.height = size + 'px';
+                petal.style.left = Math.random() * 100 + 'vw';
+                petal.style.animationDuration = Math.random() * 3 + 4 + 's';
+                document.body.appendChild(petal);
+                setTimeout(() => petal.remove(), 7000);
+            }, 400);
+        }
+    </script>
+</body>
+</html>
